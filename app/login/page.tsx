@@ -1,9 +1,21 @@
 "use client";
+import { useState, useEffect } from "react";
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export default function LoginPage() {
     const router = useRouter();
+    const [darkMode, setDarkMode] = useState(false);
+    
+    useEffect(() => {
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        setDarkMode(prefersDark);
+      }, []);
+
     async function submit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
@@ -22,19 +34,39 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="w-full lg:grid lg:min-h-[100vh] lg:grid-cols-2 xl:min-h-[100vh]">
-            <div className="flex items-center justify-center py-12 bg-secondary-600">
-                <div className="mx-auto grid max-w-6xl gap-12">
-                    <div className="grid gap-2 text-center">
-                        <h1>Login</h1>
-                    </div>
-                    <form onSubmit={submit} className="grid gap-4">
-                        <input type="text" name="username" placeholder="Username" />
-                        <input type="password" name="password" placeholder="Password" />
-                        <button type="submit">Login</button>
-                    </form>
-                </div>
+    <div className={`flex items-center justify-center min-h-screen dark:bg-gray-900 bg-gray-100`}>
+      <Card className={`w-96 p-6 shadow-lg rounded-2xl dark:bg-gray-800 text-white bg-white`}>
+        <CardHeader>
+          <CardTitle className="text-center text-xl font-semibold dark:text-white text-black">Login</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={submit} className="space-y-4">
+            <div>
+              <Label htmlFor="username" className="dark:text-white text-black">Email</Label>
+              <Input
+                id="username"
+                type="username"
+                name="username"
+                required
+                placeholder="Enter your username"
+                className={"dark:bg-gray-700 dark:text-white bg-gray-100 text-black"}
+              />
             </div>
-        </div>
-    );
+            <div>
+              <Label htmlFor="password" className="dark:text-white text-black">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                required
+                placeholder="Enter your password"
+                className={"dark:bg-gray-700 dark:text-white bg-gray-100 text-black"}
+              />
+            </div>
+            <Button type="submit" className="w-full">Login</Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
 }
