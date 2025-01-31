@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [darkMode, setDarkMode] = useState(false);
+  const [isMounted, setIsMounted] = useState(false); // Because fuck next.js complaining about unequal rendering
 
   useEffect(() => {
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     setDarkMode(prefersDark);
+    setIsMounted(true);
   }, []);
 
   useEffect(() => {
@@ -16,6 +19,10 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
       document.documentElement.classList.remove("dark");
     }
   }, [darkMode]);
+  
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div className={darkMode ? "dark" : ""}>
