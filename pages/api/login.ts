@@ -18,6 +18,10 @@ export default async function handler(
     return res.status(400).json({ error: 'Username and password are required' });
   }
 
+  if (!USER || !PWD) {
+    return res.status(500).json({ error: 'USER and PWD are not set' });
+  }
+
   if (username !== USER) {
     return res.status(401).json({ error: 'Invalid username or password' });
   }
@@ -32,7 +36,7 @@ export default async function handler(
   }
 
   const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '4h' });
-  console.log('token2', token);
+  //console.log('token2', token);
   res.setHeader('Set-Cookie', `token=${token}; Path=/; HttpOnly; SameSite=Strict`);
   res.status(200).json({ message: "Set cookie" });
 }
