@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { loginUser } from "@/pages/scada-handler";
+import { loginScada } from "@/pages/api-handler";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,7 +19,6 @@ export default function LoginPage() {
     const formData = new FormData(event.currentTarget);
     const username = formData.get("username");
     const password = formData.get("password");
-    const { SCADA_USER, SCADA_PWD } = process.env;
     const response = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -27,7 +26,7 @@ export default function LoginPage() {
     });
 
     if (response.ok) {
-      if (SCADA_USER && SCADA_PWD) loginUser(SCADA_USER, SCADA_PWD);
+      await loginScada();
       router.push("../dashboard");
     } else {
       setError(true);
@@ -52,7 +51,7 @@ export default function LoginPage() {
               <Label htmlFor="username">Email</Label>
               <Input
                 id="username"
-                type={"password"}
+                type="username"
                 name="username"
                 required
                 placeholder="Enter your username"
