@@ -7,17 +7,17 @@ export async function loginScada() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: "admin", password: "admin" }),
     });
-    const data = await response.json();
-    scadaToken = data;
-    console.log(scadaToken)
 }
 
 export async function getAllDatapoints() {
-    console.log(scadaToken)
     const response = await fetch("/api/scada/datapoints", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: scadaToken }),
     });
+    if(response.status === 401) {
+        await loginScada();
+        return getAllDatapoints();
+    }
     return response.json();
 }
