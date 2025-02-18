@@ -36,7 +36,7 @@ export default async function handler(
   }
 
   const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '4h' });
-  //console.log('token2', token);
   res.setHeader('Set-Cookie', `token=${token}; Path=/; HttpOnly; SameSite=Strict`);
+  console.log("login headers", res.getHeaders());
   res.status(200).json({ message: "Set cookie" });
 }
