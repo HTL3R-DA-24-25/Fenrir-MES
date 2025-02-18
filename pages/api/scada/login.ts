@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if(response.headers["set-cookie"] === undefined || response.headers["set-cookie"][0] === undefined) {
       return res.status(401).json({ error: "Invalid username or password" });
     }
-    let header = response.headers["set-cookie"][0].split(";")[0] += "; Path=/; HttpOnly; SameSite=Strict";
+    const header = response.headers["set-cookie"][0].split(";")[0] += "; Path=/; HttpOnly; SameSite=Strict";
     // console.log("login headers", header);
     // console.log("login headers", response.headers["set-cookie"][0].split(";")[1] = "Path=/; HttpOnly; SameSite=Strict"  );
     res.setHeader("Set-Cookie", header);
