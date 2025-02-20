@@ -1,50 +1,71 @@
 "use client";
 
-import { Calendar } from "@/components/ui/calendar";
-import { getAllDatapoints, getValueOfDatapoint } from "@/pages/api-handler";
+import { getAllDatapoints } from "@/pages/api-handler";
 import { useState, useEffect } from "react";
 import * as React from "react";
-import { addDays } from "date-fns";
-import { DateRange } from "react-day-picker";
 import { columns, Datapoint } from "./columns-setters";
+import { columns as columns_timers } from "./columns-timers";
 import { DataTable } from "./data-table-setters";
 
+/* export function updateDatapointTimers() {
+    getDatapointTimers();
+} */
+
 export default function Dashboard() {
-    const [datapoints, setDatapoints] = useState<Datapoint[]>([]);
-    async function handleLogin() {
-        try {
-            let data = await getAllDatapoints();
-            //remove all non datapoints that aren't NUMERIC
-            data = data.filter((datapoint: Datapoint) => datapoint.dataType !== "NUMERIC");
-            setDatapoints(data); // Update state with fetched data
+  const [datapoints, setDatapoints] = useState<Datapoint[]>([]);
+  const [datapoint_timers, setDatapointTimers] = useState<Datapoint[]>([]);
 
-            console.log(data);
-            /* for (const point of data) {
-        const value = await getValueOfDatapoint(point.idx);
-        console.log(value);
-      } */
-        } catch (error) {
-            console.error("Error fetching datapoints:", error);
-        }
+  async function getDatapoints() {
+    try {
+      let data = await getAllDatapoints();
+      //remove all non datapoints that aren't NUMERIC
+
+      data = data.filter(
+        (datapoint: Datapoint) => datapoint.dataType !== "NUMERIC"
+      );
+
+      setDatapoints(data); // Update state with fetched data
+      getDatapointTimers();
+    } catch (error) {
+      console.error("Error fetching datapoints:", error);
     }
-    const [date, setDate] = React.useState<DateRange | undefined>({
-        from: new Date(2022, 0, 20),
-        to: addDays(new Date(2022, 0, 20), 20),
-    });
+  }
 
-    useEffect(() => {
-        handleLogin();
-    }, []);
+  async function getDatapointTimers() {
+    try {
+      const response = await fetch("/api/get_datapoint_timers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await response.json();
+      for (let i = 0; i < data.length; i++) {
+        data[i].name = datapoints.find((xid) => xid.xid === data[i].xid)?.name;
+      }
+      setDatapointTimers(data);
+    } catch (error) {
+      console.error("Error fetching datapoint timers:", error);
+    }
+  }
 
-    return (
-        <div className={`flex items-center justify-around min-h-screen dark:bg-gray-900 bg-gray-100`}>
-            <div className="flex items-center justify-center flex-col">
-                <h1>Setters</h1>
-                <DataTable columns={columns} data={datapoints} />
-            </div>
-            <div className="flex items-center justify-center flex-col">
-                <h1>Upcoming</h1>
-            </div>
-        </div>
-    );
+  useEffect(() => {
+    getDatapoints();
+  }, []);
+    
+  useEffect(() => {
+    getDatapointTimers();
+  }, []);
+  return (
+    <div
+      className={`flex items-center justify-around min-h-screen dark:bg-gray-900 bg-gray-100`}
+    >
+      <div className="flex items-center justify-center flex-col">
+        <h1>Setters</h1>
+        <DataTable columns={columns} data={datapoints} />
+      </div>
+      <div className="flex items-center justify-center flex-col">
+        <h1>Upcoming</h1>
+        <DataTable columns={columns_timers} data={datapoint_timers} />
+      </div>
+    </div>
+  );
 }

@@ -10,7 +10,7 @@ import { useState } from "react"; // Import useState for local state management
 
 export type Datapoint = {
     id: number;
-    idx: string;
+    xid: string;
     name: string;
     extendName: string;
     dataType: "NUMERIC" | "STRING";
@@ -25,6 +25,15 @@ export type Datapoint = {
     endTime?: string; 
     active: boolean;
 };
+
+export async function addDatapointSetters(xid: string, on: boolean, date: Date, startTime: string, endTime: string) {
+    fetch("/api/add_datapoint_timer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ xid, on, date, startTime, endTime }),
+    });
+    console.log(JSON.stringify({ xid, on, date, startTime, endTime }),)
+}
 
 export const columns: ColumnDef<Datapoint>[] = [
     {
@@ -97,7 +106,14 @@ export const columns: ColumnDef<Datapoint>[] = [
         header: "Confirm",
         cell: ({ row }) => (
             <Button variant="default" size="sm" onClick={() => {
-              // TODO Send to backend where the MES should send updates to the scada at the specified time 
+                if (!row.original.date || !row.original.startTime || !row.original.endTime) {
+                    console.error("Please fill in all fields");
+                    return;
+                }
+                if (!row.original.active) {
+                    row.original.active = false;
+                }
+                addDatapointSetters(row.original.xid, row.original.active, row.original.date, row.original.startTime, row.original.endTime);
             }}>
                 <Check className="h-4 w-4" /> {}
             </Button>
