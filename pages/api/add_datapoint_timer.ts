@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { addDatapointTimer } from "./datapoint_timers";
 
 export default function handler(request: NextApiRequest, response: NextApiResponse) {
-    // console.log(request.body);
-    addDatapointTimer(request.body);
+    addDatapointTimer(request.body, request.headers.host as string);
     response.status(200).json({ message: "Timer added" });
 }

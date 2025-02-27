@@ -10,6 +10,5 @@ export default async function handler(
   }
   res.setHeader('Set-Cookie', `token=; Path=/; HttpOnly; SameSite=Strict`);
   res.appendHeader('Set-Cookie', `JSESSIONID=; Path=/; HttpOnly; SameSite=Strict`);
-    console.log("logout headers", res.getHeaders());
   res.status(200).json({ message: "Removed cookie" });
 }

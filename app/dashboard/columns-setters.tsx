@@ -2,11 +2,11 @@
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { DatePicker } from "@/components/ui/date-picker"; // Import the DatePicker
-import { TimeRangePicker } from "@/components/ui/time-range-picker"; // Import the TimeRangePicker
-import { Button } from "@/components/ui/button"; // Import the Button component
-import { Check } from "lucide-react"; // Import a trash icon from Lucide
-import { useState } from "react"; // Import useState for local state management
+import { DatePicker } from "@/components/ui/date-picker"; 
+import { TimeRangePicker } from "@/components/ui/time-range-picker"; 
+import { Button } from "@/components/ui/button"; 
+import { Check } from "lucide-react"; 
+import { useState } from "react"; 
 
 export type Datapoint = {
     id: number;
@@ -26,16 +26,15 @@ export type Datapoint = {
     active: boolean;
 };
 
-export async function addDatapointSetters(xid: string, on: boolean, date: Date, startTime: string, endTime: string) {
+export async function addDatapointSetters(xid: string, active: boolean, date: Date, startTime: string, endTime: string) {
     fetch("/api/add_datapoint_timer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ xid, on, date, startTime, endTime }),
+        body: JSON.stringify({ xid, active, date, startTime, endTime }),
     });
-    console.log(JSON.stringify({ xid, on, date, startTime, endTime }),)
 }
 
-export const columns: ColumnDef<Datapoint>[] = [
+export const getColumns = (onCheckboxChange?: (xid: string, isChecked: boolean) => void): ColumnDef<Datapoint>[] => [
     {
         accessorKey: "name",
         header: "Name",
@@ -43,7 +42,7 @@ export const columns: ColumnDef<Datapoint>[] = [
     {
         id: "enableDisable",
         header: "Enable/Disable",
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
             return (
                 <div className="flex items-center justify-center">
                     <Checkbox
@@ -51,6 +50,10 @@ export const columns: ColumnDef<Datapoint>[] = [
                         checked={row.original.active}
                         onCheckedChange={(value) => {
                             row.original.active = !!value;
+                            
+                            if (onCheckboxChange) {
+                                onCheckboxChange(row.original.xid, !!value);
+                            }
                         }}
                         aria-label="Enable/Disable row"
                     />
@@ -86,16 +89,16 @@ export const columns: ColumnDef<Datapoint>[] = [
                             console.error("Start time cannot be greater than end time");
                             return;
                         }
-                        setStartTime(time); // Update local state
-                        row.original.startTime = time; // Update the row data
+                        setStartTime(time);
+                        row.original.startTime = time;
                     }}
                     onEndTimeChange={(time) => {
                         if (time < startTime) {
                             console.error("Start time cannot be greater than end time");
                             return;
                         }
-                        setEndTime(time); // Update local state
-                        row.original.endTime = time; // Update the row data
+                        setEndTime(time);
+                        row.original.endTime = time; 
                     }}
                 />
             );
@@ -120,3 +123,5 @@ export const columns: ColumnDef<Datapoint>[] = [
         ),
     },
 ];
+
+export const columns = getColumns();

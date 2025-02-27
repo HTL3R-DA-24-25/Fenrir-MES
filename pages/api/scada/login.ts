@@ -18,7 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // console.log("login headers", header);
     // console.log("login headers", response.headers["set-cookie"][0].split(";")[1] = "Path=/; HttpOnly; SameSite=Strict"  );
     res.setHeader("Set-Cookie", header);
-    console.log("login headers", res.getHeaders());
     res.status(200).json({ message: "Set cookie" });
   } catch (error) {
     console.error("Error logging in:", error);

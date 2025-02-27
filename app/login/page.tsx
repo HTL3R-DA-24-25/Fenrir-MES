@@ -26,7 +26,8 @@ export default function LoginPage() {
     });
 
     if (response.ok) {
-      await loginScada();
+      loginScada();
+      console.log("Logged in");
       router.push("../dashboard");
     } else {
       setError(true);

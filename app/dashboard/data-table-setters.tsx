@@ -19,16 +19,21 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  onCheckboxChange?: (xid: string, isChecked: boolean) => void
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onCheckboxChange,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    meta: {
+      onCheckboxChange, 
+    },
   })
 
   return (

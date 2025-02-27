@@ -7,6 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method Not Allowed" });
     }
+    const { xid, value } = req.body;
     if (req.headers.cookie === undefined || !req.headers.cookie.includes("JSESSIONID")) {
         return res.status(401).json({ error: "No cookie found in request headers" });
     }
@@ -16,12 +17,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const response = await axios.get(`${API_BASE_URL}/datapoint/getAll`, {
+        const response = await axios.get(`${API_BASE_URL}/point_value/setValue/${xid}/1/${value}`, {
             headers: { Cookie: cookie },
         });
-        JSON.parse(JSON.stringify(response.data));
-        res.status(200).json(response.data);
-    } catch {
-        res.status(500).json({ error: "Error fetching data points" });
+        if(value === response.data) {
+            res.status(200).json({ message: "Data point set" });
+        }else {
+            console.log(xid)
+            console.log(response.data)
+            res.status(500).json({ error: "Error setting data point" });
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Error setting data point" });
     }
 }
