@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log(response.data)
             res.status(500).json({ error: "Error setting data point" });
         }
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: "Error setting data point" });
     }
 }

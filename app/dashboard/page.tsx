@@ -75,6 +75,7 @@ export default function Dashboard() {
     }, 5000);
     
     return () => clearInterval(refreshInterval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); 
   
   const columnsWithHandler = getColumns(handleCheckboxChange);

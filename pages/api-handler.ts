@@ -4,7 +4,6 @@ export async function loginScada() {
     await fetch("/api/scada/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: "admin", password: "admin" }),
     });
 }
 

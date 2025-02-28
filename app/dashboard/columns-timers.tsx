@@ -19,20 +19,6 @@ export type Datapoint_Timer = {
   active: boolean;
 };
 
-export async function addDatapointSetters(
-  xid: string,
-  active: boolean,
-  date: Date,
-  startTime: string,
-  endTime: string
-) {
-  fetch("/api/add_datapoint_timer", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ xid, active, date, startTime, endTime }),
-  });
-}
-
 export async function deleteDatapointTimer(mes_id: number) {
   fetch("/api/delete_datapoint_timer", {
     method: "POST",
