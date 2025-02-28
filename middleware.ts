@@ -1,7 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {}
 export const config = {
   matcher: [
     "/login",
