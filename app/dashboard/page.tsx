@@ -1,6 +1,6 @@
 "use client";
 
-import { getAllDatapoints } from "@/pages/api-handler";
+import { getAllDatapoints } from "@/lib/api-handler";
 import { useState, useEffect } from "react";
 import * as React from "react";
 import { getColumns, Datapoint } from "./columns-setters";
