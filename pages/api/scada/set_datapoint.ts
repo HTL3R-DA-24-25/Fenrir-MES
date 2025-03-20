@@ -23,8 +23,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if(value === response.data) {
             res.status(200).json({ message: "Data point set" });
         }else {
-            console.log(xid)
-            console.log(response.data)
             res.status(500).json({ error: "Error setting data point" });
         }
     } catch {

@@ -48,7 +48,6 @@ async function scheduleCronJob(datapointTimer: DatapointTimer, host: string) {
   const SCADA_PWD = process.env.SCADA_PWD;
     
     const startJob = cron.schedule(cronStartExpression, async () => {
-        console.log(`Starting job for datapoint ${datapointTimer.xid}`);
         const res = await fetch(`http://${host}/api/scada/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -66,7 +65,6 @@ async function scheduleCronJob(datapointTimer: DatapointTimer, host: string) {
 
     
     const endJob = cron.schedule(cronEndExpression, async () => {
-        console.log(`Ending job for datapoint ${datapointTimer.xid}`);
         const res = await fetch(`http://${host}/api/scada/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },

@@ -10,21 +10,21 @@ import { Check } from "lucide-react";
 import { useState } from "react";
 
 export type Datapoint = {
-  id: number;
-  xid: string;
-  name: string;
-  extendName: string;
-  dataType: "NUMERIC" | "STRING";
-  enabled: boolean;
-  description: string;
-  type: number;
-  typeId: number;
-  dataSourceName: string;
-  // MES Settings, not from the SCADA
-  date?: Date;
-  startTime?: string;
-  endTime?: string;
-  active: boolean;
+    id: number;
+    xid: string;
+    name: string;
+    extendName: string;
+    dataType: "NUMERIC" | "STRING" | "BINARY";
+    enabled: boolean;
+    description: string;
+    type: number;
+    typeId: number;
+    dataSourceName: string;
+    // MES Settings, not from the SCADA
+    date?: Date; 
+    startTime?: string; 
+    endTime?: string; 
+    active: boolean;
 };
 
 export async function addDatapointSetters(

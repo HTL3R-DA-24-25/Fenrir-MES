@@ -11,22 +11,22 @@ export default async function handler(
     return res.status(405).json({ error: 'Method not allowed' });
   }
   const { username, password } = req.body;
-  const { USER, PWD } = process.env;
+  const { USER, PASSWORD } = process.env;
   const JWT_SECRET = process.env.JWT_SECRET;
 
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password are required' });
   }
 
-  if (!USER || !PWD) {
-    return res.status(500).json({ error: 'USER and PWD are not set' });
+  if (!USER || !PASSWORD) {
+    return res.status(500).json({ error: 'USER and PASSWORD are not set' });
   }
 
   if (username !== USER) {
     return res.status(401).json({ error: 'Invalid username or password' });
   }
 
-  const isValidPassword = await bcrypt.compare(password, await bcrypt.hash(PWD, 10));
+  const isValidPassword = await bcrypt.compare(password, await bcrypt.hash(PASSWORD, 10));
   if (!isValidPassword) {
     return res.status(401).json({ error: 'Invalid username or password' });
   }
