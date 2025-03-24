@@ -22,6 +22,8 @@ RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
 # Copy only the absolute essentials
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+
 
 USER nextjs
 
