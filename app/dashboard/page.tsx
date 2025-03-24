@@ -25,7 +25,7 @@ export default function Dashboard() {
     try {
       let data = await getAllDatapoints();
       data = data.filter(
-        (datapoint: Datapoint) => datapoint.dataType == "BINARY" && datapoint.enabled 
+        (datapoint: Datapoint) => datapoint.dataType == "BINARY" && datapoint.enabled && datapoint.name.endsWith("verride")
       );
   
       setDatapoints(prevDatapoints => {

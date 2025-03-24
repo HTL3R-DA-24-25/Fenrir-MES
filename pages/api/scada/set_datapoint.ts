@@ -17,15 +17,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const response = await axios.get(`${API_BASE_URL}/point_value/setValue/${xid}/1/${value}`, {
+        const on = value ? 1 : 0;
+        console.log(`${API_BASE_URL}/point_value/setValue/${xid}/1/${on}` )
+        const response = await axios.get(`${API_BASE_URL}/point_value/setValue/${xid}/1/${on}`, {
             headers: { Cookie: cookie },
         });
-        if(value === response.data) {
+        if(on === response.data) {
             res.status(200).json({ message: "Data point set" });
-        }else {
+        } else {
+            console.log(response.data);
             res.status(500).json({ error: "Error setting data point" });
         }
-    } catch {
+    } catch{
         res.status(500).json({ error: "Error setting data point" });
     }
 }
